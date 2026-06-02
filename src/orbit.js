@@ -9,6 +9,9 @@ const normalizeAngle = (angle) => {
   return wrapped < 0 ? wrapped + TWO_PI : wrapped;
 };
 
+/**
+ * Solves M = E - e sin(E) with Newton-Raphson and returns eccentric anomaly E (radians).
+ */
 export function solveKeplerEquation(meanAnomaly, eccentricity, tolerance = 1e-8, maxIterations = 20) {
   let eccentricAnomaly = eccentricity < 0.8 ? meanAnomaly : Math.PI;
 
@@ -32,6 +35,10 @@ export function orbitalPeriodSeconds(semiMajorAxisAU, starMassSolar) {
   return TWO_PI * Math.sqrt((aMeters ** 3) / (G * starMassKg));
 }
 
+/**
+ * Computes a planet position in AU at a given simulation time from Keplerian elements.
+ * Returns Cartesian coordinates centered on the star and orbital metadata.
+ */
 export function orbitalPositionAtTime(planet, starMassSolar, simulationTimeSeconds) {
   const period = orbitalPeriodSeconds(planet.semiMajorAxisAU, starMassSolar);
   const meanMotion = TWO_PI / period;

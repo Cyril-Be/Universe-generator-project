@@ -45,7 +45,7 @@
     },
     {
       "name": "Nysa",
-      "type": "super-terre",
+      "type": "super-earth",
       "massEarth": 2.6,
       "radiusEarth": 1.35,
       "densityGcm3": 6.1,
@@ -81,7 +81,7 @@
     },
     {
       "name": "Dravos",
-      "type": "géante gazeuse",
+      "type": "gas-giant",
       "massEarth": 241,
       "radiusEarth": 10.7,
       "densityGcm3": 1.28,
@@ -93,7 +93,7 @@
     },
     {
       "name": "Kaelor",
-      "type": "géante de glace",
+      "type": "ice-giant",
       "massEarth": 17.8,
       "radiusEarth": 3.95,
       "densityGcm3": 1.64,

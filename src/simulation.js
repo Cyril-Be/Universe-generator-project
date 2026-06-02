@@ -11,6 +11,8 @@ export class Simulation {
     this.simulationTimeSeconds = 0;
     this.timeScale = 1;
     this.paused = false;
+    this.cachedPlanetStates = null;
+    this.cachedAtTimeSeconds = null;
   }
 
   static fromSystemData(systemData) {
@@ -33,28 +35,46 @@ export class Simulation {
 
   resume() {
     this.paused = false;
+    this.cachedPlanetStates = null;
+    this.cachedAtTimeSeconds = null;
   }
 
   togglePause() {
-    this.paused = !this.paused;
+    if (this.paused) {
+      this.resume();
+      return;
+    }
+
+    this.pause();
   }
 
   step(deltaRealSeconds) {
     if (!this.paused && deltaRealSeconds > 0) {
       this.simulationTimeSeconds += deltaRealSeconds * this.timeScale;
+      this.cachedPlanetStates = null;
+      this.cachedAtTimeSeconds = null;
     }
 
     return this.getPlanetStates();
   }
 
   getPlanetStates() {
-    return this.planets.map((planet) => ({
+    if (this.cachedPlanetStates && this.cachedAtTimeSeconds === this.simulationTimeSeconds) {
+      return this.cachedPlanetStates;
+    }
+
+    const states = this.planets.map((planet) => ({
       name: planet.name,
       type: planet.type,
       orbit: orbitalPositionAtTime(planet, this.star.massSolar, this.simulationTimeSeconds),
       estimatedTemperatureK: planet.estimatedTemperatureK,
       habitability: planet.habitability
     }));
+
+    this.cachedPlanetStates = states;
+    this.cachedAtTimeSeconds = this.simulationTimeSeconds;
+
+    return states;
   }
 
   getState() {
