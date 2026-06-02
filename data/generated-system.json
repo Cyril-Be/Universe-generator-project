@@ -1,124 +1,239 @@
 {
-  "systemName": "Helios-Delta",
-  "formation": {
-    "ageBillionYears": 4.6,
-    "scenario": "Formed from a metal-rich protoplanetary disk with inward migration of volatile-rich cores"
+  "systemName": "Procedural-Reference",
+  "generationModel": {
+    "procedural": true,
+    "multiplicityDistribution": [
+      {
+        "stars": 1,
+        "probability": 0.5,
+        "label": "single"
+      },
+      {
+        "stars": 2,
+        "probability": 0.4,
+        "label": "binary"
+      },
+      {
+        "stars": 3,
+        "probability": 0.1,
+        "label": "triple"
+      }
+    ],
+    "stellarImfDistribution": [
+      {
+        "spectralClass": "M",
+        "probability": 0.76
+      },
+      {
+        "spectralClass": "K",
+        "probability": 0.12
+      },
+      {
+        "spectralClass": "G",
+        "probability": 0.07
+      },
+      {
+        "spectralClass": "F",
+        "probability": 0.03
+      },
+      {
+        "spectralClass": "A",
+        "probability": 0.009
+      },
+      {
+        "spectralClass": "B",
+        "probability": 0.0009
+      },
+      {
+        "spectralClass": "O",
+        "probability": 0.0001
+      }
+    ],
+    "planetTypeDistribution": [
+      {
+        "type": "telluric",
+        "probability": 0.42
+      },
+      {
+        "type": "super-earth",
+        "probability": 0.32
+      },
+      {
+        "type": "mini-neptune",
+        "probability": 0.15
+      },
+      {
+        "type": "neptune",
+        "probability": 0.09
+      },
+      {
+        "type": "gas-giant",
+        "probability": 0.02
+      }
+    ]
   },
-  "stellarTypeDistributionModel": {
-    "M": 0.76,
-    "K": 0.12,
-    "G": 0.07,
-    "F": 0.03,
-    "A": 0.009,
-    "B": 0.0009,
-    "O": 0.0001,
-    "selectedTypeForThisSystem": "G2V"
-  },
-  "exoplanetOccurrenceModel": {
-    "expectedPlanetsPerSunLikeStar": "4-8",
-    "generatedPlanetCount": 6
+  "stellarSystem": {
+    "multiplicity": "binary",
+    "stars": [
+      {
+        "name": "Procedural-Reference A",
+        "spectralType": "M2V",
+        "massSolar": 0.13492447012027003,
+        "luminositySolar": 0.002295812915195632,
+        "temperatureK": 2815.2966116469356,
+        "radiusSolar": 0.20140608006294464
+      },
+      {
+        "name": "Companion-1",
+        "spectralType": "M6V",
+        "massSolar": 0.11197009548392807,
+        "luminositySolar": 0.0014950735136523708,
+        "temperatureK": 2724.9035827336843,
+        "radiusSolar": 0.17349287298112645,
+        "orbit": {
+          "semiMajorAxisAU": 1.0134271001187152,
+          "eccentricity": 0.21434679343365132,
+          "configuration": "close-binary"
+        }
+      }
+    ]
   },
   "star": {
-    "name": "Helios-Delta A",
-    "spectralType": "G2V",
-    "massSolar": 1.02,
-    "luminositySolar": 1.08,
-    "temperatureK": 5840
+    "name": "Procedural-Reference A",
+    "spectralType": "M2V",
+    "massSolar": 0.13492447012027003,
+    "luminositySolar": 0.002295812915195632,
+    "temperatureK": 2815.2966116469356,
+    "radiusSolar": 0.20140608006294464
   },
+  "stars": [
+    {
+      "name": "Procedural-Reference A",
+      "spectralType": "M2V",
+      "massSolar": 0.13492447012027003,
+      "luminositySolar": 0.002295812915195632,
+      "temperatureK": 2815.2966116469356,
+      "radiusSolar": 0.20140608006294464
+    },
+    {
+      "name": "Companion-1",
+      "spectralType": "M6V",
+      "massSolar": 0.11197009548392807,
+      "luminositySolar": 0.0014950735136523708,
+      "temperatureK": 2724.9035827336843,
+      "radiusSolar": 0.17349287298112645,
+      "orbit": {
+        "semiMajorAxisAU": 1.0134271001187152,
+        "eccentricity": 0.21434679343365132,
+        "configuration": "close-binary"
+      }
+    }
+  ],
   "habitableZone": {
-    "innerAU": 0.97,
-    "outerAU": 1.47,
-    "notes": "Estimated from stellar luminosity scaling"
+    "innerAU": 10,
+    "outerAU": 14.7
   },
   "planets": [
     {
-      "name": "Aster",
+      "name": "Ardor",
       "type": "telluric",
-      "massEarth": 0.42,
-      "radiusEarth": 0.74,
-      "densityGcm3": 5.8,
-      "semiMajorAxisAU": 0.43,
-      "eccentricity": 0.04,
-      "atmosphere": ["CO2", "N2", "Ar traces"],
-      "estimatedTemperatureK": 430,
-      "habitability": 0.05
+      "massEarth": 1.4359738821862267,
+      "radiusEarth": 1.053781964726067,
+      "densityGcm3": 6.761543641574394,
+      "semiMajorAxisAU": 0.34153602191715615,
+      "eccentricity": 0.19768207999877632,
+      "atmosphere": [
+        {
+          "species": "N2",
+          "fraction": 0.6171727809397369
+        },
+        {
+          "species": "O2",
+          "fraction": 0.3036424519471471
+        },
+        {
+          "species": "SO2",
+          "fraction": 0.04410272062063687
+        },
+        {
+          "species": "CO2",
+          "fraction": 0.02741778696218197
+        },
+        {
+          "species": "H2O",
+          "fraction": 0.007664259530297125
+        }
+      ],
+      "estimatedTemperatureK": 104.12635400338456,
+      "habitability": 0.09103731424288214,
+      "initialMeanAnomaly": 0.4556468462172113,
+      "inclinationDeg": 6.80661126319319,
+      "longitudeAscendingNodeDeg": 189.86082879826427,
+      "argumentOfPeriapsisDeg": 70.11307784356177
     },
     {
-      "name": "Nysa",
+      "name": "Belly",
       "type": "super-earth",
-      "massEarth": 2.6,
-      "radiusEarth": 1.35,
-      "densityGcm3": 6.1,
-      "semiMajorAxisAU": 0.88,
-      "eccentricity": 0.06,
-      "atmosphere": ["N2", "CO2", "H2O vapor"],
-      "estimatedTemperatureK": 302,
-      "habitability": 0.63
+      "massEarth": 6.976984174130484,
+      "radiusEarth": 1.9,
+      "densityGcm3": 6.55049386401217,
+      "semiMajorAxisAU": 0.6525086865407075,
+      "eccentricity": 0.12202057637739926,
+      "atmosphere": [
+        {
+          "species": "N2",
+          "fraction": 0.9521590705828057
+        },
+        {
+          "species": "CH4",
+          "fraction": 0.047840929417194346
+        }
+      ],
+      "estimatedTemperatureK": 75.33308812200076,
+      "habitability": 0.0041882239510905046,
+      "initialMeanAnomaly": 6.1577079196284545,
+      "inclinationDeg": 5.872139035258442,
+      "longitudeAscendingNodeDeg": 230.97075518220663,
+      "argumentOfPeriapsisDeg": 188.79117851145566
     },
     {
-      "name": "Thalna",
+      "name": "Caesol",
       "type": "telluric",
-      "massEarth": 0.97,
-      "radiusEarth": 1.01,
-      "densityGcm3": 5.5,
-      "semiMajorAxisAU": 1.14,
-      "eccentricity": 0.08,
-      "atmosphere": ["N2", "O2", "H2O", "CO2 traces"],
-      "estimatedTemperatureK": 279,
-      "habitability": 0.86
-    },
-    {
-      "name": "Velis",
-      "type": "mini-neptune",
-      "massEarth": 8.1,
-      "radiusEarth": 2.35,
-      "densityGcm3": 2.4,
-      "semiMajorAxisAU": 2.05,
-      "eccentricity": 0.03,
-      "atmosphere": ["H2", "He", "CH4"],
-      "estimatedTemperatureK": 190,
-      "habitability": 0.08
-    },
-    {
-      "name": "Dravos",
-      "type": "gas-giant",
-      "massEarth": 241,
-      "radiusEarth": 10.7,
-      "densityGcm3": 1.28,
-      "semiMajorAxisAU": 5.34,
-      "eccentricity": 0.05,
-      "atmosphere": ["H2", "He", "NH3 traces"],
-      "estimatedTemperatureK": 118,
-      "habitability": 0.0
-    },
-    {
-      "name": "Kaelor",
-      "type": "ice-giant",
-      "massEarth": 17.8,
-      "radiusEarth": 3.95,
-      "densityGcm3": 1.64,
-      "semiMajorAxisAU": 11.2,
-      "eccentricity": 0.09,
-      "atmosphere": ["H2", "He", "CH4", "H2S traces"],
-      "estimatedTemperatureK": 82,
-      "habitability": 0.0
+      "massEarth": 1.2427862892858685,
+      "radiusEarth": 1.0400831181033505,
+      "densityGcm3": 6.086167637592496,
+      "semiMajorAxisAU": 1.2295524878492607,
+      "eccentricity": 0.006627097632735968,
+      "atmosphere": [
+        {
+          "species": "N2",
+          "fraction": 0.8636813025183324
+        },
+        {
+          "species": "CO2",
+          "fraction": 0.13631869748166758
+        }
+      ],
+      "estimatedTemperatureK": 54.87889815770696,
+      "habitability": 0.0972771121504294,
+      "initialMeanAnomaly": 0.11591263896953263,
+      "inclinationDeg": 6.666314607486129,
+      "longitudeAscendingNodeDeg": 112.80590350739658,
+      "argumentOfPeriapsisDeg": 157.77123528532684
     }
   ],
   "minorBodies": {
-    "asteroidBelts": [
-      {
-        "name": "Inner Belt",
-        "innerAU": 2.6,
-        "outerAU": 3.4,
-        "composition": ["silicates", "metal-rich asteroids"]
-      }
-    ],
+    "asteroidBelts": [],
     "cometReservoirs": [
       {
-        "name": "Outer Scattered Disk",
-        "innerAU": 30,
-        "outerAU": 120,
-        "composition": ["ices", "dust", "organics"]
+        "name": "Outer Reservoir",
+        "innerAU": 12,
+        "outerAU": 48,
+        "composition": [
+          "ices",
+          "dust",
+          "organics"
+        ]
       }
     ]
   }

@@ -1,25 +1,26 @@
 # Universe Generator Project
 
-Implémentation initiale des phases 1 et 2 :
-
-- **Phase 1** : génération d'un système stellaire réaliste au format JSON (`/data/generated-system.json`)
-- **Phase 2** : moteur de simulation orbitale simplifiée et modulaire compatible web/Three.js (`/src`)
+Implémentation d'un générateur procédural de systèmes stellaires avec simulation orbitale.
 
 ## Structure
 
-- `/data/generated-system.json` : étoile, planètes, zones habitables, ceintures mineures
+- `/data/generated-system.json` : exemple de sortie procédurale
 - `/src/star.js` : modèle d'étoile et constantes physiques
 - `/src/planet.js` : modèle de planète
 - `/src/orbit.js` : résolution de Kepler et calcul des positions
 - `/src/simulation.js` : boucle de simulation (pause, x1, x10, x100)
+- `/src/stellar-distribution.js` : IMF, relations masse/luminosité/température/rayon
+- `/src/planetary-distribution.js` : occurrences planétaires, orbites, atmosphères
+- `/src/atmosphere-generator.js` : compositions chimiques et logique de rétention
+- `/src/system-generator.js` : orchestrateur principal `generateStarSystem()`
 - `/src/index.js` : exports centralisés
 
 ## Usage (ES modules)
 
 ```js
-import systemData from "./data/generated-system.json" assert { type: "json" };
-import { Simulation } from "./src/simulation.js";
+import { generateStarSystem, Simulation } from "./src/index.js";
 
+const systemData = generateStarSystem({ seed: 42 });
 const simulation = Simulation.fromSystemData(systemData);
 simulation.setTimeScale(10);
 
