@@ -9,6 +9,8 @@ const IMF_WEIGHTS = [
 ];
 
 const SOLAR_TEMPERATURE_K = 5772;
+const UNIFORM_BIAS = 1;
+const LOWER_MASS_BIAS = 2;
 
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
@@ -68,16 +70,19 @@ export function getMassFromSpectralType(type, rng = Math.random) {
   }
 
   const [minMass, maxMass] = typeData.massRange;
-  const bias = spectralClass === "O" || spectralClass === "B" ? 1 : 2;
+  const bias = spectralClass === "O" || spectralClass === "B" ? UNIFORM_BIAS : LOWER_MASS_BIAS;
   const sampled = randomBetween(rng, 0, 1) ** bias;
   return clamp(minMass + sampled * (maxMass - minMass), minMass, maxMass);
 }
 
 export function getSpectralTypeFromMass(massSolar, rng = Math.random) {
-  const matching = IMF_WEIGHTS.find(({ massRange }) => massSolar >= massRange[0] && massSolar < massRange[1]);
+  const matching = IMF_WEIGHTS.find(({ massRange }, index) => {
+    const isLast = index === IMF_WEIGHTS.length - 1;
+    return massSolar >= massRange[0] && (isLast ? massSolar <= massRange[1] : massSolar < massRange[1]);
+  });
   const spectralClass = matching ? matching.spectralClass : "M";
-  const subtype = Math.floor((1 - randomBetween(rng, 0, 1)) * 10);
-  return `${spectralClass}${clamp(subtype, 0, 9)}V`;
+  const subtype = Math.floor(rng() * 10);
+  return `${spectralClass}${subtype}V`;
 }
 
 export function getRandomSpectralType(rng = Math.random) {

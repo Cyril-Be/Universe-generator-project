@@ -37,6 +37,39 @@ const PLANET_TYPE_WEIGHTS = [
     eccentricityRange: [0.01, 0.35]
   }
 ];
+const EARTH_EQUILIBRIUM_TEMP_K = 278;
+const BOX_MULLER_EPSILON = 1e-12;
+const COMPRESSION_START_MASS_EARTH = 2;
+const MAX_COMPRESSION_FACTOR_BONUS = 0.35;
+const COMPRESSION_LOG_SCALE = 0.2;
+const INNER_ORBIT_MASS_SCALING = 0.02;
+const TWO_PI = 2 * Math.PI;
+const PLANET_NAME_SYLLABLES = [
+  "Ar",
+  "Bel",
+  "Cae",
+  "Dor",
+  "El",
+  "Fen",
+  "Ga",
+  "Hel",
+  "Io",
+  "Ka",
+  "Ly",
+  "Mor",
+  "Ny",
+  "Or",
+  "Pra",
+  "Qua",
+  "Ry",
+  "Sol",
+  "Tor",
+  "Vel",
+  "Wy",
+  "Xa",
+  "Yl",
+  "Zen"
+];
 
 const randomBetween = (rng, min, max) => min + (max - min) * rng();
 
@@ -58,7 +91,7 @@ const weightedChoice = (rng, items) => {
 };
 
 const randomLogNormal = (rng, mean = 0, sigma = 0.4) => {
-  const u1 = Math.max(rng(), 1e-12);
+  const u1 = Math.max(rng(), BOX_MULLER_EPSILON);
   const u2 = rng();
   const z0 = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
   return Math.exp(mean + sigma * z0);
@@ -82,12 +115,16 @@ const estimateRadiusFromMass = (type, massEarth, rng) => {
 
 const calculateDensityGcm3 = (massEarth, radiusEarth) => {
   const earthDensity = 5.51;
-  return clamp((earthDensity * massEarth) / (radiusEarth ** 3), 0.2, 15);
+  const compressionFactor =
+    massEarth > COMPRESSION_START_MASS_EARTH
+      ? 1 + Math.min(MAX_COMPRESSION_FACTOR_BONUS, Math.log10(massEarth) * COMPRESSION_LOG_SCALE)
+      : 1;
+  return clamp((earthDensity * massEarth * compressionFactor) / (radiusEarth ** 3), 0.2, 20);
 };
 
 const calculateEquilibriumTemperature = (starLuminositySolar, semiMajorAxisAU) => {
   const safeAxis = Math.max(semiMajorAxisAU, 0.03);
-  return 278 * (starLuminositySolar ** 0.25) / Math.sqrt(safeAxis);
+  return EARTH_EQUILIBRIUM_TEMP_K * (starLuminositySolar ** 0.25) / Math.sqrt(safeAxis);
 };
 
 const calculateHabitabilityScore = ({ type, massEarth, semiMajorAxisAU, starLuminositySolar }) => {
@@ -99,9 +136,9 @@ const calculateHabitabilityScore = ({ type, massEarth, semiMajorAxisAU, starLumi
 };
 
 const makePlanetName = (index) => {
-  const syllables = ["Ar", "Bel", "Cae", "Dor", "El", "Fen", "Ga", "Hel", "Io", "Ka", "Ly", "Mor", "Ny", "Or", "Pra", "Qua", "Ry", "Sol", "Tor", "Vel", "Wy", "Xa", "Yl", "Zen"];
-  const first = syllables[index % syllables.length];
-  const second = syllables[(index * 7 + 3) % syllables.length].toLowerCase();
+  const first = PLANET_NAME_SYLLABLES[index % PLANET_NAME_SYLLABLES.length];
+  const second =
+    PLANET_NAME_SYLLABLES[(index * 7 + 3) % PLANET_NAME_SYLLABLES.length].toLowerCase();
   return `${first}${second}`;
 };
 
@@ -123,7 +160,7 @@ export function getRandomPlanetType(rng = Math.random) {
 }
 
 export function generateOrbits(planetTypes, starMass, rng = Math.random) {
-  const baseInnerAU = clamp(0.03 + (1 / Math.max(starMass, 0.08)) * 0.02, 0.03, 0.2);
+  const baseInnerAU = clamp(0.03 + (1 / Math.max(starMass, 0.08)) * INNER_ORBIT_MASS_SCALING, 0.03, 0.2);
   const orbits = [];
 
   let currentAxis = baseInnerAU * randomBetween(rng, 0.9, 1.4);
@@ -194,7 +231,7 @@ export function getRandomPlanetarySystem(starMass, starLuminosity, rng = Math.ra
       ),
       estimatedTemperatureK,
       habitability,
-      initialMeanAnomaly: randomBetween(rng, 0, Math.PI * 2),
+      initialMeanAnomaly: randomBetween(rng, 0, TWO_PI),
       inclinationDeg: randomBetween(rng, 0, 7),
       longitudeAscendingNodeDeg: randomBetween(rng, 0, 360),
       argumentOfPeriapsisDeg: randomBetween(rng, 0, 360)

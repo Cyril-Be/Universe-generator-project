@@ -13,6 +13,7 @@ const MULTIPLICITY_DISTRIBUTION = [
   { stars: 2, probability: 0.4, label: "binary" },
   { stars: 3, probability: 0.1, label: "triple" }
 ];
+const ORBIT_COLLISION_BUCKET_SIZE_AU = 0.001;
 
 const randomBetween = (rng, min, max) => min + (max - min) * rng();
 
@@ -130,7 +131,7 @@ const validateSystem = ({ stars, planets }) => {
       throw new Error(`Invalid orbital parameters for planet ${planet.name}`);
     }
 
-    const bucket = Math.round(planet.semiMajorAxisAU * 1000);
+    const bucket = Math.round(planet.semiMajorAxisAU / ORBIT_COLLISION_BUCKET_SIZE_AU);
     if (orbitSet.has(bucket)) {
       throw new Error(`Orbit packing collision detected near ${planet.semiMajorAxisAU} AU`);
     }
@@ -145,12 +146,15 @@ const validateSystem = ({ stars, planets }) => {
 
 export function generateStarSystem(options = {}) {
   const rng = Number.isInteger(options.seed) ? createSeededRng(options.seed) : Math.random;
+  const generatedSystemName = Number.isInteger(options.seed)
+    ? `UGP-${Math.abs(options.seed).toString().padStart(6, "0").slice(-6)}`
+    : `UGP-${Math.floor(rng() * 1_000_000).toString().padStart(6, "0")}`;
   const primary = getRandomSpectralType(rng);
   const multiplicity = weightedChoice(rng, MULTIPLICITY_DISTRIBUTION);
 
   const stars = [
     {
-      name: `${options.systemName || "Procedural-System"} A`,
+      name: `${options.systemName || generatedSystemName} A`,
       spectralType: primary.spectralType,
       massSolar: primary.massSolar,
       luminositySolar: primary.luminositySolar,
@@ -168,7 +172,7 @@ export function generateStarSystem(options = {}) {
   const minorBodies = buildMinorBodies(planets);
 
   const starSystem = {
-    systemName: options.systemName || `UGP-${Math.floor(rng() * 1_000_000).toString().padStart(6, "0")}`,
+    systemName: options.systemName || generatedSystemName,
     generationModel: {
       procedural: true,
       multiplicityDistribution: MULTIPLICITY_DISTRIBUTION,

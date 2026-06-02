@@ -1,4 +1,9 @@
 const EARTH_ESCAPE_VELOCITY_KMS = 11.186;
+const RETENTION_THRESHOLD_FACTOR = 6;
+const OXYGEN_HABITABILITY_THRESHOLD = 0.65;
+const OXYGEN_HABITABILITY_BOOST = 0.45;
+const MAX_OXYGEN_PROBABILITY = 0.85;
+const REFERENCE_TEMPERATURE_K = 288;
 
 const ATMOSPHERE_TEMPLATES = {
   "telluric": [
@@ -66,8 +71,8 @@ export function estimateEscapeVelocityKmS(massEarth, radiusEarth) {
 
 export function canRetainLightGases({ massEarth, radiusEarth, temperatureK }) {
   const escapeVelocity = estimateEscapeVelocityKmS(massEarth, radiusEarth);
-  const thermalFactor = Math.sqrt(Math.max(temperatureK, 50) / 288);
-  const retentionScore = escapeVelocity / (thermalFactor * 6);
+  const thermalFactor = Math.sqrt(Math.max(temperatureK, 50) / REFERENCE_TEMPERATURE_K);
+  const retentionScore = escapeVelocity / (thermalFactor * RETENTION_THRESHOLD_FACTOR);
 
   return retentionScore > 1;
 }
@@ -88,8 +93,8 @@ export function generateAtmosphereComposition(
     }
 
     let probability = template.probability;
-    if (template.species === "O2" && habitability > 0.65) {
-      probability = Math.min(0.85, probability + 0.45 * habitability);
+    if (template.species === "O2" && habitability > OXYGEN_HABITABILITY_THRESHOLD) {
+      probability = Math.min(MAX_OXYGEN_PROBABILITY, probability + OXYGEN_HABITABILITY_BOOST * habitability);
     }
 
     if (rng() <= probability) {

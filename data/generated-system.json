@@ -85,7 +85,7 @@
       },
       {
         "name": "Companion-1",
-        "spectralType": "M3V",
+        "spectralType": "M6V",
         "massSolar": 0.11197009548392807,
         "luminositySolar": 0.0014950735136523708,
         "temperatureK": 2724.9035827336843,
@@ -117,7 +117,7 @@
     },
     {
       "name": "Companion-1",
-      "spectralType": "M3V",
+      "spectralType": "M6V",
       "massSolar": 0.11197009548392807,
       "luminositySolar": 0.0014950735136523708,
       "temperatureK": 2724.9035827336843,
@@ -176,7 +176,7 @@
       "type": "super-earth",
       "massEarth": 6.976984174130484,
       "radiusEarth": 1.9,
-      "densityGcm3": 5.604779530464932,
+      "densityGcm3": 6.55049386401217,
       "semiMajorAxisAU": 0.6525086865407075,
       "eccentricity": 0.12202057637739926,
       "atmosphere": [

@@ -1,6 +1,8 @@
 export const EARTH_MASS_KG = 5.9722e24;
 const EARTH_DENSITY_GCM3 = 5.51;
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+const getCompressionFactor = (massEarth) =>
+  massEarth > 2 ? 1 + Math.min(0.35, Math.log10(massEarth) * 0.2) : 1;
 
 export class Planet {
   constructor({
@@ -41,7 +43,7 @@ export class Planet {
     this.radiusEarth = radiusEarth;
     this.densityGcm3 =
       densityGcm3 ??
-      clamp((EARTH_DENSITY_GCM3 * massEarth) / (radiusEarth ** 3), 0.2, 30);
+      clamp((EARTH_DENSITY_GCM3 * massEarth * getCompressionFactor(massEarth)) / (radiusEarth ** 3), 0.2, 20);
     this.semiMajorAxisAU = semiMajorAxisAU;
     this.eccentricity = eccentricity;
     this.atmosphere = atmosphere;
