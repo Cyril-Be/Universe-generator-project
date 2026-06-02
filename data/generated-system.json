@@ -1,0 +1,111 @@
+{
+  "systemName": "Helios-Delta",
+  "formation": {
+    "ageBillionYears": 4.6,
+    "scenario": "Formed from a metal-rich protoplanetary disk with inward migration of volatile-rich cores"
+  },
+  "star": {
+    "name": "Helios-Delta A",
+    "spectralType": "G2V",
+    "massSolar": 1.02,
+    "luminositySolar": 1.08,
+    "temperatureK": 5840
+  },
+  "habitableZone": {
+    "innerAU": 0.97,
+    "outerAU": 1.47,
+    "notes": "Estimated from stellar luminosity scaling"
+  },
+  "planets": [
+    {
+      "name": "Aster",
+      "type": "telluric",
+      "massEarth": 0.42,
+      "radiusEarth": 0.74,
+      "densityGcm3": 5.8,
+      "semiMajorAxisAU": 0.43,
+      "eccentricity": 0.04,
+      "atmosphere": ["CO2", "N2", "Ar traces"],
+      "estimatedTemperatureK": 430,
+      "habitability": 0.05
+    },
+    {
+      "name": "Nysa",
+      "type": "super-terre",
+      "massEarth": 2.6,
+      "radiusEarth": 1.35,
+      "densityGcm3": 6.1,
+      "semiMajorAxisAU": 0.88,
+      "eccentricity": 0.06,
+      "atmosphere": ["N2", "CO2", "H2O vapor"],
+      "estimatedTemperatureK": 302,
+      "habitability": 0.63
+    },
+    {
+      "name": "Thalna",
+      "type": "telluric",
+      "massEarth": 0.97,
+      "radiusEarth": 1.01,
+      "densityGcm3": 5.5,
+      "semiMajorAxisAU": 1.14,
+      "eccentricity": 0.08,
+      "atmosphere": ["N2", "O2", "H2O", "CO2 traces"],
+      "estimatedTemperatureK": 279,
+      "habitability": 0.86
+    },
+    {
+      "name": "Velis",
+      "type": "mini-neptune",
+      "massEarth": 8.1,
+      "radiusEarth": 2.35,
+      "densityGcm3": 2.4,
+      "semiMajorAxisAU": 2.05,
+      "eccentricity": 0.03,
+      "atmosphere": ["H2", "He", "CH4"],
+      "estimatedTemperatureK": 190,
+      "habitability": 0.08
+    },
+    {
+      "name": "Dravos",
+      "type": "géante gazeuse",
+      "massEarth": 241,
+      "radiusEarth": 10.7,
+      "densityGcm3": 1.28,
+      "semiMajorAxisAU": 5.34,
+      "eccentricity": 0.05,
+      "atmosphere": ["H2", "He", "NH3 traces"],
+      "estimatedTemperatureK": 118,
+      "habitability": 0.0
+    },
+    {
+      "name": "Kaelor",
+      "type": "géante de glace",
+      "massEarth": 17.8,
+      "radiusEarth": 3.95,
+      "densityGcm3": 1.64,
+      "semiMajorAxisAU": 11.2,
+      "eccentricity": 0.09,
+      "atmosphere": ["H2", "He", "CH4", "H2S traces"],
+      "estimatedTemperatureK": 82,
+      "habitability": 0.0
+    }
+  ],
+  "minorBodies": {
+    "asteroidBelts": [
+      {
+        "name": "Inner Belt",
+        "innerAU": 2.6,
+        "outerAU": 3.4,
+        "composition": ["silicates", "metal-rich asteroids"]
+      }
+    ],
+    "cometReservoirs": [
+      {
+        "name": "Outer Scattered Disk",
+        "innerAU": 30,
+        "outerAU": 120,
+        "composition": ["ices", "dust", "organics"]
+      }
+    ]
+  }
+}
