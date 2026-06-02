@@ -4,6 +4,20 @@
     "ageBillionYears": 4.6,
     "scenario": "Formed from a metal-rich protoplanetary disk with inward migration of volatile-rich cores"
   },
+  "stellarTypeDistributionModel": {
+    "M": 0.76,
+    "K": 0.12,
+    "G": 0.07,
+    "F": 0.03,
+    "A": 0.009,
+    "B": 0.0009,
+    "O": 0.0001,
+    "selectedTypeForThisSystem": "G2V"
+  },
+  "exoplanetOccurrenceModel": {
+    "expectedPlanetsPerSunLikeStar": "4-8",
+    "generatedPlanetCount": 6
+  },
   "star": {
     "name": "Helios-Delta A",
     "spectralType": "G2V",
