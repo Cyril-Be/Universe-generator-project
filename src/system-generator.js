@@ -14,6 +14,8 @@ const MULTIPLICITY_DISTRIBUTION = [
   { stars: 3, probability: 0.1, label: "triple" }
 ];
 const ORBIT_COLLISION_BUCKET_SIZE_AU = 0.001;
+const MIN_BINARY_SEPARATION_AU = 0.12;
+const MIN_STABLE_ORBIT_MARGIN = 0.85;
 
 const randomBetween = (rng, min, max) => min + (max - min) * rng();
 
@@ -48,6 +50,7 @@ const createSeededRng = (seed) => {
 const buildCompanionStar = (primaryMass, index, rng) => {
   const massRatio = clamp(rng() ** 1.4, 0.08, 0.98);
   const massSolar = clamp(primaryMass * massRatio, 0.08, primaryMass);
+  const isCloseCompanion = index === 1;
 
   return {
     name: `Companion-${index}`,
@@ -57,19 +60,45 @@ const buildCompanionStar = (primaryMass, index, rng) => {
     temperatureK: getTemperatureFromMass(massSolar),
     radiusSolar: getRadiusFromMass(massSolar),
     orbit: {
-      semiMajorAxisAU: randomBetween(rng, index === 1 ? 0.03 : 8, index === 1 ? 2 : 300),
-      eccentricity: randomBetween(rng, 0, 0.6),
-      configuration: index === 1 ? "close-binary" : "hierarchical"
+      semiMajorAxisAU: randomBetween(rng, isCloseCompanion ? MIN_BINARY_SEPARATION_AU : 8, isCloseCompanion ? 4 : 300),
+      eccentricity: randomBetween(rng, 0, isCloseCompanion ? 0.45 : 0.6),
+      configuration: isCloseCompanion ? "primary-centered" : "hierarchical"
     }
   };
 };
 
 const computeHabitableZone = (luminositySolar) => {
-  const safeLuminosity = Math.max(luminositySolar, 0.01);
+  const safeLuminosity = Math.max(luminositySolar, 0.0001);
   return {
-    innerAU: 1 / Math.sqrt(safeLuminosity),
-    outerAU: 1.47 / Math.sqrt(safeLuminosity)
+    innerAU: Math.sqrt(safeLuminosity / 1.1),
+    outerAU: Math.sqrt(safeLuminosity / 0.53)
   };
+};
+
+const getPrimaryOrbitStabilityLimitAU = (stars) => {
+  const primary = stars[0];
+  let limit = Infinity;
+
+  for (const companion of stars.slice(1)) {
+    if (!companion.orbit) {
+      continue;
+    }
+
+    const binaryAxisAU = companion.orbit.semiMajorAxisAU;
+    const eccentricity = companion.orbit.eccentricity;
+    const massRatio = companion.massSolar / (primary.massSolar + companion.massSolar);
+    const stableFraction =
+      0.464 -
+      0.38 * massRatio -
+      0.631 * eccentricity +
+      0.586 * massRatio * eccentricity +
+      0.15 * eccentricity ** 2 -
+      0.198 * massRatio * eccentricity ** 2;
+    const companionLimit = binaryAxisAU * Math.max(0.02, stableFraction) * MIN_STABLE_ORBIT_MARGIN;
+    limit = Math.min(limit, companionLimit);
+  }
+
+  return limit;
 };
 
 const buildMinorBodies = (planets) => {
@@ -125,10 +154,15 @@ const buildMinorBodies = (planets) => {
 
 const validateSystem = ({ stars, planets }) => {
   const orbitSet = new Set();
+  const stableOrbitLimitAU = getPrimaryOrbitStabilityLimitAU(stars);
 
   for (const planet of planets) {
     if (planet.semiMajorAxisAU <= 0 || planet.eccentricity >= 1 || planet.eccentricity < 0) {
       throw new Error(`Invalid orbital parameters for planet ${planet.name}`);
+    }
+
+    if (planet.semiMajorAxisAU * (1 + planet.eccentricity) > stableOrbitLimitAU) {
+      throw new Error(`Planet ${planet.name} exceeds the stable primary orbit limit`);
     }
 
     const bucket = Math.round(planet.semiMajorAxisAU / ORBIT_COLLISION_BUCKET_SIZE_AU);
@@ -167,7 +201,11 @@ export function generateStarSystem(options = {}) {
     stars.push(buildCompanionStar(primary.massSolar, i, rng));
   }
 
-  const planets = getRandomPlanetarySystem(primary.massSolar, primary.luminositySolar, rng);
+  const stableOrbitLimitAU = getPrimaryOrbitStabilityLimitAU(stars);
+  const planets = getRandomPlanetarySystem(primary.massSolar, primary.luminositySolar, rng, {
+    maxOrbitAU: stableOrbitLimitAU,
+    maxApastronAU: stableOrbitLimitAU
+  });
   const habitableZone = computeHabitableZone(primary.luminositySolar);
   const minorBodies = buildMinorBodies(planets);
 
@@ -186,6 +224,9 @@ export function generateStarSystem(options = {}) {
     star: stars[0],
     stars,
     habitableZone,
+    stability: {
+      primaryOrbitLimitAU: Number.isFinite(stableOrbitLimitAU) ? stableOrbitLimitAU : null
+    },
     planets,
     minorBodies
   };

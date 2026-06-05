@@ -8,13 +8,14 @@ export const SOLAR_MASS_KG = 1.98847e30;
 export const AU_IN_METERS = 1.495978707e11;
 
 export class Star {
-  constructor({ name, spectralType, massSolar, luminositySolar, temperatureK, radiusSolar }) {
+  constructor({ name, spectralType, massSolar, luminositySolar, temperatureK, radiusSolar, orbit }) {
     this.name = name;
     this.spectralType = spectralType;
     this.massSolar = massSolar;
     this.luminositySolar = luminositySolar ?? getLuminosityFromMass(massSolar);
     this.radiusSolar = radiusSolar ?? getRadiusFromMass(massSolar);
     this.temperatureK = temperatureK ?? getTemperatureFromMass(massSolar);
+    this.orbit = orbit;
   }
 
   getMassKg() {

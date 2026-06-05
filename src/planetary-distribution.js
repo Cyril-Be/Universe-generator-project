@@ -43,6 +43,8 @@ const COMPRESSION_START_MASS_EARTH = 2;
 const MAX_COMPRESSION_FACTOR_BONUS = 0.35;
 const COMPRESSION_LOG_SCALE = 0.2;
 const INNER_ORBIT_MASS_SCALING = 0.02;
+const MIN_ORBIT_GAP_AU = 0.025;
+const MIN_PERIASTRON_AU = 0.015;
 const TWO_PI = 2 * Math.PI;
 const PLANET_NAME_SYLLABLES = [
   "Ar",
@@ -159,7 +161,8 @@ export function getRandomPlanetType(rng = Math.random) {
   };
 }
 
-export function generateOrbits(planetTypes, starMass, rng = Math.random) {
+export function generateOrbits(planetTypes, starMass, rng = Math.random, options = {}) {
+  const maxOrbitAU = Number.isFinite(options.maxOrbitAU) ? options.maxOrbitAU : Infinity;
   const baseInnerAU = clamp(0.03 + (1 / Math.max(starMass, 0.08)) * INNER_ORBIT_MASS_SCALING, 0.03, 0.2);
   const orbits = [];
 
@@ -168,7 +171,11 @@ export function generateOrbits(planetTypes, starMass, rng = Math.random) {
     const packingFactor = randomBetween(rng, 1.25, 2.25);
     currentAxis *= packingFactor;
     currentAxis *= randomLogNormal(rng, 0, 0.18);
-    currentAxis = Math.max(currentAxis, baseInnerAU + i * 0.04);
+    currentAxis = Math.max(currentAxis, baseInnerAU + i * MIN_ORBIT_GAP_AU);
+    if (currentAxis > maxOrbitAU) {
+      break;
+    }
+
     orbits.push(currentAxis);
   }
 
@@ -188,7 +195,7 @@ export function generateAtmosphere(planetType, mass, temperature, radius = 1, ha
   );
 }
 
-export function getRandomPlanetarySystem(starMass, starLuminosity, rng = Math.random) {
+export function getRandomPlanetarySystem(starMass, starLuminosity, rng = Math.random, options = {}) {
   const baselineCount = 3.5 * Math.max(0.6, Math.min(1.8, starMass ** 0.35));
   const count = clamp(Math.round(baselineCount + randomBetween(rng, -2, 2)), 0, 14);
   if (count === 0) {
@@ -196,15 +203,26 @@ export function getRandomPlanetarySystem(starMass, starLuminosity, rng = Math.ra
   }
 
   const rawPlanets = Array.from({ length: count }, () => getRandomPlanetType(rng));
-  const orbits = generateOrbits(rawPlanets, starMass, rng);
+  const orbits = generateOrbits(rawPlanets, starMass, rng, options);
 
-  return rawPlanets.map((planetData, index) => {
+  return rawPlanets.slice(0, orbits.length).map((planetData, index) => {
     const semiMajorAxisAU = orbits[index];
     const estimatedTemperatureK = calculateEquilibriumTemperature(starLuminosity, semiMajorAxisAU);
+    const maxEccentricityFromPeriastron = Math.max(0, 1 - MIN_PERIASTRON_AU / semiMajorAxisAU);
+    const maxEccentricityFromStability = Number.isFinite(options.maxApastronAU)
+      ? Math.max(0, options.maxApastronAU / semiMajorAxisAU - 1)
+      : 0.95;
+    const eccentricityUpper = Math.min(
+      planetData.eccentricityRange[1],
+      maxEccentricityFromPeriastron,
+      maxEccentricityFromStability,
+      0.95
+    );
+    const eccentricityLower = Math.min(planetData.eccentricityRange[0], eccentricityUpper);
     const eccentricity = randomBetween(
       rng,
-      planetData.eccentricityRange[0],
-      planetData.eccentricityRange[1]
+      eccentricityLower,
+      eccentricityUpper
     );
     const habitability = calculateHabitabilityScore({
       type: planetData.type,

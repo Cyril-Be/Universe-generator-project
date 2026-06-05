@@ -1,19 +1,28 @@
 # Universe Generator Project
 
-Implémentation d'un générateur procédural de systèmes stellaires avec simulation orbitale.
+Implémentation d'un générateur procédural de systèmes stellaires avec simulation orbitale et rendu Three.js interactif.
 
 ## Structure
 
 - `/data/generated-system.json` : exemple de sortie procédurale
-- `/src/star.js` : modèle d'étoile et constantes physiques
-- `/src/planet.js` : modèle de planète
-- `/src/orbit.js` : résolution de Kepler et calcul des positions
-- `/src/simulation.js` : boucle de simulation (pause, x1, x10, x100)
-- `/src/stellar-distribution.js` : IMF, relations masse/luminosité/température/rayon
-- `/src/planetary-distribution.js` : occurrences planétaires, orbites, atmosphères
-- `/src/atmosphere-generator.js` : compositions chimiques et logique de rétention
+- `/src/core/*` : exports de compatibilité pour la couche génération scientifique
+- `/src/physics/*` : exports de compatibilité pour la couche orbitale/simulation
+- `/src/render/adapters.js` : conversion unités physiques → unités visuelles Three.js
+- `/src/render/three-renderer.js` : scène Three.js vanilla, caméra orbitale, sphères et orbites
 - `/src/system-generator.js` : orchestrateur principal `generateStarSystem()`
+- `/src/simulation.js` : API temps réel `Simulation.fromSystemData(system)`
 - `/src/index.js` : exports centralisés
+
+Les fichiers historiques à la racine de `/src` restent disponibles pour éviter de casser les imports existants.
+
+## Application locale
+
+```bash
+npm install
+npm run dev
+```
+
+Puis ouvrir l'URL Vite affichée dans le terminal.
 
 ## Usage (ES modules)
 
@@ -25,9 +34,20 @@ const simulation = Simulation.fromSystemData(systemData);
 simulation.setTimeScale(10);
 
 function tick(deltaSeconds) {
-  const planetStates = simulation.step(deltaSeconds);
-  return planetStates;
+  simulation.step(deltaSeconds);
+  return simulation.getState();
 }
+```
+
+Le rendu peut être adapté avec :
+
+```js
+import { adaptToThreeJS } from "./src/render/adapters.js";
+
+const renderState = adaptToThreeJS(simulation.getState(), {
+  distanceScale: 20,
+  timeScale: 1
+});
 ```
 
 ## Consignes Copilot
