@@ -1,6 +1,6 @@
 export { Star } from "./star.js";
 export { Planet } from "./planet.js";
-export { orbitalPeriodSeconds, orbitalPositionAtTime, solveKeplerEquation } from "./orbit.js";
+export { orbitalPeriodSeconds, orbitalPositionAtTime, solveKeplerEquation, validateOrbitElements } from "./orbit.js";
 export { Simulation } from "./simulation.js";
 export {
   getMassFromSpectralType,
@@ -24,3 +24,5 @@ export {
   generateAtmosphereComposition
 } from "./atmosphere-generator.js";
 export { generateStarSystem } from "./system-generator.js";
+export { adaptToThreeJS } from "./render/adapters.js";
+export { ThreeRenderer, createThreeRenderer } from "./render/three-renderer.js";

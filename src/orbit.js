@@ -1,6 +1,8 @@
 import { AU_IN_METERS, G, SOLAR_MASS_KG } from "./star.js";
 
 const TWO_PI = Math.PI * 2;
+const MIN_CENTRAL_MASS_SOLAR = 0.01;
+const MAX_ELLIPTIC_ECCENTRICITY = 0.98;
 
 const degToRad = (deg) => (deg * Math.PI) / 180;
 
@@ -13,6 +15,14 @@ const normalizeAngle = (angle) => {
  * Solves M = E - e sin(E) with Newton-Raphson and returns eccentric anomaly E (radians).
  */
 export function solveKeplerEquation(meanAnomaly, eccentricity, tolerance = 1e-8, maxIterations = 20) {
+  if (!Number.isFinite(meanAnomaly)) {
+    throw new Error("meanAnomaly must be a finite number");
+  }
+
+  if (!Number.isFinite(eccentricity) || eccentricity < 0 || eccentricity >= 1) {
+    throw new Error(`eccentricity must be in [0, 1), received ${eccentricity}`);
+  }
+
   let eccentricAnomaly = eccentricity < 0.8 ? meanAnomaly : Math.PI;
 
   for (let i = 0; i < maxIterations; i += 1) {
@@ -30,9 +40,30 @@ export function solveKeplerEquation(meanAnomaly, eccentricity, tolerance = 1e-8,
 }
 
 export function orbitalPeriodSeconds(semiMajorAxisAU, starMassSolar) {
+  validateOrbitElements({ semiMajorAxisAU, eccentricity: 0, centralMassSolar: starMassSolar });
+
   const aMeters = semiMajorAxisAU * AU_IN_METERS;
   const starMassKg = starMassSolar * SOLAR_MASS_KG;
   return TWO_PI * Math.sqrt((aMeters ** 3) / (G * starMassKg));
+}
+
+export function validateOrbitElements({
+  semiMajorAxisAU,
+  eccentricity,
+  centralMassSolar,
+  name = "orbit"
+}) {
+  if (!Number.isFinite(semiMajorAxisAU) || semiMajorAxisAU <= 0) {
+    throw new Error(`Invalid semiMajorAxisAU for ${name}: ${semiMajorAxisAU}`);
+  }
+
+  if (!Number.isFinite(eccentricity) || eccentricity < 0 || eccentricity >= MAX_ELLIPTIC_ECCENTRICITY) {
+    throw new Error(`Invalid eccentricity for ${name}: ${eccentricity}`);
+  }
+
+  if (!Number.isFinite(centralMassSolar) || centralMassSolar < MIN_CENTRAL_MASS_SOLAR) {
+    throw new Error(`Invalid central mass for ${name}: ${centralMassSolar}`);
+  }
 }
 
 /**
@@ -40,6 +71,13 @@ export function orbitalPeriodSeconds(semiMajorAxisAU, starMassSolar) {
  * Returns Cartesian coordinates centered on the star and orbital metadata.
  */
 export function orbitalPositionAtTime(planet, starMassSolar, simulationTimeSeconds) {
+  validateOrbitElements({
+    semiMajorAxisAU: planet.semiMajorAxisAU,
+    eccentricity: planet.eccentricity,
+    centralMassSolar: starMassSolar,
+    name: planet.name
+  });
+
   const period = orbitalPeriodSeconds(planet.semiMajorAxisAU, starMassSolar);
   const meanMotion = TWO_PI / period;
   const meanAnomaly = normalizeAngle(planet.initialMeanAnomaly + meanMotion * simulationTimeSeconds);

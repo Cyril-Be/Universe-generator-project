@@ -77,149 +77,94 @@
     "stars": [
       {
         "name": "Procedural-Reference A",
-        "spectralType": "M2V",
-        "massSolar": 0.13492447012027003,
-        "luminositySolar": 0.002295812915195632,
-        "temperatureK": 2815.2966116469356,
-        "radiusSolar": 0.20140608006294464
+        "spectralType": "M8V",
+        "massSolar": 0.18450150114889075,
+        "luminositySolar": 0.004715498546215792,
+        "temperatureK": 2973.7760855438733,
+        "radiusSolar": 0.2587020816144116
       },
       {
         "name": "Companion-1",
-        "spectralType": "M6V",
-        "massSolar": 0.11197009548392807,
-        "luminositySolar": 0.0014950735136523708,
-        "temperatureK": 2724.9035827336843,
-        "radiusSolar": 0.17349287298112645,
+        "spectralType": "M5V",
+        "massSolar": 0.08,
+        "luminositySolar": 0.0006899773051727145,
+        "temperatureK": 2569.206600903598,
+        "radiusSolar": 0.13257816069359946,
         "orbit": {
-          "semiMajorAxisAU": 1.0134271001187152,
-          "eccentricity": 0.21434679343365132,
-          "configuration": "close-binary"
+          "semiMajorAxisAU": 1.1801246180012823,
+          "eccentricity": 0.2811350942705758,
+          "configuration": "primary-centered"
         }
       }
     ]
   },
   "star": {
     "name": "Procedural-Reference A",
-    "spectralType": "M2V",
-    "massSolar": 0.13492447012027003,
-    "luminositySolar": 0.002295812915195632,
-    "temperatureK": 2815.2966116469356,
-    "radiusSolar": 0.20140608006294464
+    "spectralType": "M8V",
+    "massSolar": 0.18450150114889075,
+    "luminositySolar": 0.004715498546215792,
+    "temperatureK": 2973.7760855438733,
+    "radiusSolar": 0.2587020816144116
   },
   "stars": [
     {
       "name": "Procedural-Reference A",
-      "spectralType": "M2V",
-      "massSolar": 0.13492447012027003,
-      "luminositySolar": 0.002295812915195632,
-      "temperatureK": 2815.2966116469356,
-      "radiusSolar": 0.20140608006294464
+      "spectralType": "M8V",
+      "massSolar": 0.18450150114889075,
+      "luminositySolar": 0.004715498546215792,
+      "temperatureK": 2973.7760855438733,
+      "radiusSolar": 0.2587020816144116
     },
     {
       "name": "Companion-1",
-      "spectralType": "M6V",
-      "massSolar": 0.11197009548392807,
-      "luminositySolar": 0.0014950735136523708,
-      "temperatureK": 2724.9035827336843,
-      "radiusSolar": 0.17349287298112645,
+      "spectralType": "M5V",
+      "massSolar": 0.08,
+      "luminositySolar": 0.0006899773051727145,
+      "temperatureK": 2569.206600903598,
+      "radiusSolar": 0.13257816069359946,
       "orbit": {
-        "semiMajorAxisAU": 1.0134271001187152,
-        "eccentricity": 0.21434679343365132,
-        "configuration": "close-binary"
+        "semiMajorAxisAU": 1.1801246180012823,
+        "eccentricity": 0.2811350942705758,
+        "configuration": "primary-centered"
       }
     }
   ],
   "habitableZone": {
-    "innerAU": 10,
-    "outerAU": 14.7
+    "innerAU": 0.06547378758095619,
+    "outerAU": 0.09432479561775728
+  },
+  "stability": {
+    "primaryOrbitLimitAU": 0.22933108879362232
   },
   "planets": [
     {
       "name": "Ardor",
-      "type": "telluric",
-      "massEarth": 1.4359738821862267,
-      "radiusEarth": 1.053781964726067,
-      "densityGcm3": 6.761543641574394,
-      "semiMajorAxisAU": 0.34153602191715615,
-      "eccentricity": 0.19768207999877632,
+      "type": "super-earth",
+      "massEarth": 3.349527152208611,
+      "radiusEarth": 1.9,
+      "densityGcm3": 2.973276373804621,
+      "semiMajorAxisAU": 0.224425409514505,
+      "eccentricity": 0.011592521544127304,
       "atmosphere": [
         {
           "species": "N2",
-          "fraction": 0.6171727809397369
-        },
-        {
-          "species": "O2",
-          "fraction": 0.3036424519471471
-        },
-        {
-          "species": "SO2",
-          "fraction": 0.04410272062063687
-        },
-        {
-          "species": "CO2",
-          "fraction": 0.02741778696218197
+          "fraction": 0.8244049351230905
         },
         {
           "species": "H2O",
-          "fraction": 0.007664259530297125
-        }
-      ],
-      "estimatedTemperatureK": 104.12635400338456,
-      "habitability": 0.09103731424288214,
-      "initialMeanAnomaly": 0.4556468462172113,
-      "inclinationDeg": 6.80661126319319,
-      "longitudeAscendingNodeDeg": 189.86082879826427,
-      "argumentOfPeriapsisDeg": 70.11307784356177
-    },
-    {
-      "name": "Belly",
-      "type": "super-earth",
-      "massEarth": 6.976984174130484,
-      "radiusEarth": 1.9,
-      "densityGcm3": 6.55049386401217,
-      "semiMajorAxisAU": 0.6525086865407075,
-      "eccentricity": 0.12202057637739926,
-      "atmosphere": [
-        {
-          "species": "N2",
-          "fraction": 0.9521590705828057
+          "fraction": 0.17091344712951362
         },
         {
           "species": "CH4",
-          "fraction": 0.047840929417194346
+          "fraction": 0.004681617747395725
         }
       ],
-      "estimatedTemperatureK": 75.33308812200076,
-      "habitability": 0.0041882239510905046,
-      "initialMeanAnomaly": 6.1577079196284545,
-      "inclinationDeg": 5.872139035258442,
-      "longitudeAscendingNodeDeg": 230.97075518220663,
-      "argumentOfPeriapsisDeg": 188.79117851145566
-    },
-    {
-      "name": "Caesol",
-      "type": "telluric",
-      "massEarth": 1.2427862892858685,
-      "radiusEarth": 1.0400831181033505,
-      "densityGcm3": 6.086167637592496,
-      "semiMajorAxisAU": 1.2295524878492607,
-      "eccentricity": 0.006627097632735968,
-      "atmosphere": [
-        {
-          "species": "N2",
-          "fraction": 0.8636813025183324
-        },
-        {
-          "species": "CO2",
-          "fraction": 0.13631869748166758
-        }
-      ],
-      "estimatedTemperatureK": 54.87889815770696,
-      "habitability": 0.0972771121504294,
-      "initialMeanAnomaly": 0.11591263896953263,
-      "inclinationDeg": 6.666314607486129,
-      "longitudeAscendingNodeDeg": 112.80590350739658,
-      "argumentOfPeriapsisDeg": 157.77123528532684
+      "estimatedTemperatureK": 153.77675301931777,
+      "habitability": 0.037393108546212986,
+      "initialMeanAnomaly": 3.497219555197698,
+      "inclinationDeg": 4.1771065895445645,
+      "longitudeAscendingNodeDeg": 88.26288250274956,
+      "argumentOfPeriapsisDeg": 232.44998565874994
     }
   ],
   "minorBodies": {
